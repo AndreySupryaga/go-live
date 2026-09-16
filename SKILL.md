@@ -56,8 +56,10 @@ node --version        # потрібен лише для Vercel CLI
 vercel --version      # може бути відсутній — це нормально
 ```
 
-Якщо чогось бракує — дай інструкцію саме для ОС людини (`uname -s`; на Windows — Git Bash/PowerShell)
-і чекай, поки людина скаже «готово». Потім перевір ще раз.
+Якщо чогось бракує — **запропонуй встановити це самому**: назви команду для ОС людини
+(`uname -s`; на Windows — Git Bash/PowerShell), попроси дозвіл і виконай її. Якщо людина хоче
+зробити сама або команда потребує пароля адміністратора — дай інструкцію і чекай «готово».
+Потім перевір ще раз.
 
 | Що | macOS | Windows |
 | --- | --- | --- |
@@ -228,6 +230,11 @@ vercel git connect --yes                # підключає GitHub-репози
 git push -u origin main                 # цей push запускає перший production-деплой
 ```
 - Якщо в людини кілька команд у Vercel і `link` просить scope — запитай, яку взяти, і додавай `--scope <team>`.
+- Помилка `git connect`: **`You need to add a Login Connection to your GitHub account first`** —
+  акаунт Vercel створено через Google або пошту, і GitHub до нього не прив'язаний. Виправлення:
+  Vercel → аватар → Settings → **Authentication** → Connections → додати **GitHub**. Далі повтори
+  `vercel git connect --yes`. **Не пропускай цей крок мовчки:** без нього push у GitHub не
+  запускає деплой.
 - Помилка `git connect` про доступ до репозиторію → GitHub-застосунок Vercel не має доступу:
   https://github.com/apps/vercel → Configure → додати репозиторій; повтори `vercel git connect --yes`.
 - Якщо push каже «Everything up-to-date» і деплой не з'явився → `vercel deploy --prod` один раз
