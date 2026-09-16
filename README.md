@@ -15,10 +15,21 @@
 **Вручну (термінал):**
 
 ```bash
+# Claude Code
 git clone https://github.com/AndreySupryaga/go-live ~/.claude/skills/go-live
+
+# Codex від OpenAI
+git clone https://github.com/AndreySupryaga/go-live ~/.agents/skills/go-live
 ```
 
-Лише для одного проєкту — клонуйте в `<папка-проєкту>/.claude/skills/go-live`.
+Лише для одного проєкту — клонуйте в `<папка-проєкту>/.claude/skills/go-live`
+(для Codex — `<папка-проєкту>/.agents/skills/go-live`).
+
+## Скільки це коштує
+
+- **Claude Code** — потрібна платна підписка Claude (Pro від 20 $/міс).
+- **Codex від OpenAI** — входить у тарифи ChatGPT, є навіть у безкоштовному (з мінімальними
+  лімітами). На Plus ліміти рахуються на кожні 5 годин — цього вистачає на кілька лендингів.
 
 ## Використання
 

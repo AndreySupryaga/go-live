@@ -254,6 +254,12 @@ curl -s -o /dev/null -w "og-image: %{http_code} %{content_type}\n" https://НА�
 curl -s https://НАЗВА.vercel.app/ | grep -E 'og:(title|image)'
 ```
 
+- Сайт 2–3 хвилини віддає `404`, а `vercel ls НАЗВА` не показує деплоїв → майже напевно не
+  спрацював `vercel git connect` (див. помилку про Login Connection вище). Зроби деплой командою
+  `vercel deploy --prod --yes` і **скажи людині**, що автодеплой з push не працюватиме, доки вона
+  не прив'яже GitHub у Vercel.
+- Публікуєш сторінку з картинками (галерея, слайди, фото)? Постав у CSS `aspect-ratio` або
+  атрибути `width`/`height` — інакше сторінка «стрибає», поки картинки вантажаться.
 - `401` замість `200` → увімкнено Deployment Protection: Vercel → Project → Settings →
   Deployment Protection → **Vercel Authentication: Disabled** для Production. Або в режимі A:
   `vercel project protection disable НАЗВА --sso`.
