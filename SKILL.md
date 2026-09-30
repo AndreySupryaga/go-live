@@ -19,6 +19,8 @@ description: >-
 
 Схема: **папка проєкту → приватний репозиторій GitHub → Vercel (нативна Git-інтеграція) → посилання**.
 Vercel сам деплоїть кожен push у `main`. GitHub Actions для деплою **не використовуються**.
+Деплой — **лише через push**: `vercel deploy` / `vercel --prod` не запускай ніколи, навіть «один
+раз». Інакше сайт оновиться сьогодні, а наступні зміни мовчки не публікуватимуться.
 
 ## Правила спілкування
 
@@ -245,8 +247,12 @@ git push -u origin main                 # цей push запускає перш�
   запускає деплой.
 - Помилка `git connect` про доступ до репозиторію → GitHub-застосунок Vercel не має доступу:
   https://github.com/apps/vercel → Configure → додати репозиторій; повтори `vercel git connect --yes`.
-- Якщо push каже «Everything up-to-date» і деплой не з'явився → `vercel deploy --prod` один раз
-  (далі все піде автоматично).
+- Якщо push каже «Everything up-to-date» і деплой не з'явився (так буває в режимі B: код
+  потрапив на GitHub ще до підключення Vercel) → запусти деплой новим push'ем:
+  ```bash
+  git commit --allow-empty -m "Перший деплой на Vercel"
+  git push
+  ```
 
 **Режим B (сайт Vercel)** — дай людині інструкцію й чекай «готово»:
 1. Відкрий https://vercel.com/new
@@ -270,9 +276,12 @@ curl -s https://НАЗВА.vercel.app/ | grep -E 'og:(title|image)'
 ```
 
 - Сайт 2–3 хвилини віддає `404`, а `vercel ls НАЗВА` не показує деплоїв → майже напевно не
-  спрацював `vercel git connect` (див. помилку про Login Connection вище). Зроби деплой командою
-  `vercel deploy --prod --yes` і **скажи людині**, що автодеплой з push не працюватиме, доки вона
-  не прив'яже GitHub у Vercel.
+  спрацював `vercel git connect`. **Не обходь це командою `vercel deploy`**: сайт з'явиться, але
+  наступні зміни не публікуватимуться, і людина не зрозуміє чому. Повтори `vercel git connect --yes`,
+  прочитай помилку й виправ причину з кроку 6: GitHub не прив'язаний до акаунта Vercel (Login
+  Connection) або застосунок Vercel не має доступу до репозиторію. Якщо GitHub уже прив'язаний до
+  **іншого** акаунта Vercel (людина колись заходила через інший Google) — відв'яжи його там:
+  Vercel → Settings → Authentication. Потім порожній коміт і `git push`, як вище.
 - Публікуєш сторінку з картинками (галерея, слайди, фото)? Постав у CSS `aspect-ratio` або
   атрибути `width`/`height` — інакше сторінка «стрибає», поки картинки вантажаться.
 - `401` замість `200` → увімкнено Deployment Protection: Vercel → Project → Settings →
