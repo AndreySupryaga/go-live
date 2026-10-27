@@ -1,54 +1,75 @@
-# go-live — скіл «виклади мій сайт в інтернет»
+# go-live — скіл «опублікуй мій сайт»
 
-Скіл для AI-агента (Claude Code та інших, що підтримують `SKILL.md`). Ви кажете
-**«виклади це на сайт»** — агент перевіряє, чи все встановлено, пропонує назву-адресу,
-додає іконку й прев'ю для месенджерів, створює приватний репозиторій на GitHub і
-підключає Vercel. Результат — посилання `https://<назва>.vercel.app`, яке оновлюється
-саме після кожної зміни.
+Скіл для AI-агента: Claude (застосунок Claude, вкладка Code) або Codex (застосунок ChatGPT).
+Ви кажете **«опублікуй на сайт»** — агент ставить потрібні програми, пропонує вільну адресу,
+додає іконку й прев'ю для месенджерів і публікує сайт на Vercel. Результат — посилання
+`https://<назва>.vercel.app`, а за бажанням і ваш власний домен.
+
+Два варіанти, агент спитає на першому запуску:
+
+- **Просто на Vercel** — один акаунт, найменше кроків.
+- **Із сейфом на GitHub** — копія проєкту й історія всіх змін у приватному репозиторії GitHub;
+  сайт оновлюється сам після кожного збереження в сейф.
 
 ## Встановлення
 
-**Найпростіше** — відкрийте Claude Code і напишіть:
+Відкрийте застосунок Claude (вкладка Code) або ChatGPT (Codex) і напишіть агенту:
 
-> Встанови скіл з https://github.com/AndreySupryaga/go-live у ~/.claude/skills/go-live
+> Встанови скіл з https://github.com/AndreySupryaga/go-live
 
-**Вручну (термінал):**
+Агент попросить дозволу записати файли — натисніть «Дозволити». Потім почніть **нову розмову**:
+скіл підхоплюється на старті.
 
-```bash
-# Claude Code
-git clone https://github.com/AndreySupryaga/go-live ~/.claude/skills/go-live
+### Для AI-агента: як встановити
 
-# Codex від OpenAI
-git clone https://github.com/AndreySupryaga/go-live ~/.agents/skills/go-live
-```
+1. Папка скіла:
+   - Claude (застосунок Claude, Claude Code): `~/.claude/skills/go-live`
+     (Windows: `%USERPROFILE%\.claude\skills\go-live`).
+   - Codex (застосунок ChatGPT, Codex CLI): `~/.agents/skills/go-live`
+     (Windows: `%USERPROFILE%\.agents\skills\go-live`).
+2. Є git → `git clone https://github.com/AndreySupryaga/go-live <папка>`.
+   Немає git → завантажте архів і розпакуйте вміст папки `go-live-main` у `<папка>`:
+   ```bash
+   curl -fsSL -o "$TMPDIR/go-live.zip" https://github.com/AndreySupryaga/go-live/archive/refs/heads/main.zip
+   unzip -o -q "$TMPDIR/go-live.zip" -d "$TMPDIR" && mkdir -p ~/.claude/skills \
+     && rm -rf ~/.claude/skills/go-live && mv "$TMPDIR/go-live-main" ~/.claude/skills/go-live
+   ```
+   Для Codex замініть `~/.claude/skills` на `~/.agents/skills`. PowerShell: `Invoke-WebRequest … -OutFile go-live.zip`,
+   `Expand-Archive`, `Move-Item`.
+3. Перевірте, що `<папка>/SKILL.md` існує. Скажіть людині почати нову розмову (у Claude Code CLI
+   досить `/reload-skills`).
 
-Лише для одного проєкту — клонуйте в `<папка-проєкту>/.claude/skills/go-live`
-(для Codex — `<папка-проєкту>/.agents/skills/go-live`).
+Вручну через інтерфейс: Claude → Customize → Skills → Upload a skill (ZIP із папкою `go-live`);
+ChatGPT → Skills → Upload a skill.
+
+## Що далі
+
+1. Відкрийте в застосунку папку з вашим сайтом (Claude: Code → Local → Open folder; ChatGPT:
+   Codex → Add new project).
+2. Напишіть: **«опублікуй на сайт»**.
+3. Відповідайте на запитання агента і натискайте «Дозволити», коли він просить. Вхід у Vercel і
+   GitHub робите самі у браузері: агент покаже код, ви його підтверджуєте.
+
+Інші фрази:
+
+- «опублікуй зміни» — оновити сайт;
+- «зміни адресу сайту на …»;
+- «додай сейф на GitHub» — увімкнути історію змін для вже опублікованого сайту;
+- «підключи домен anna-yoga.com» — свій домен.
 
 ## Скільки це коштує
 
-- **Claude Code** — потрібна платна підписка Claude (Pro від 20 $/міс).
-- **Codex від OpenAI** — входить у тарифи ChatGPT, є навіть у безкоштовному (з мінімальними
-  лімітами). На Plus ліміти рахуються на кожні 5 годин — цього вистачає на кілька лендингів.
-
-## Використання
-
-1. Відкрийте Claude Code у папці вашого сайту.
-2. Напишіть: «опублікуй на сайт» (або «виклади це на сайт», «хочу посилання на мій сайт»).
-3. Відповідайте на запитання агента. Вхід у GitHub/Vercel робите самі — агент підкаже команду.
-
-Оновити сайт потім: «опублікуй зміни». Змінити адресу: «зміни адресу сайту на …».
-
-Свій домен: «підключи домен anna-yoga.com». Платите лише за домен, сайт лишається на Vercel.
-Якщо Claude Code запущено з Chrome (`claude --chrome`, потрібні розширення Claude in Chrome і
-платний план Claude), агент сам внесе DNS-записи в кабінеті реєстратора — вам треба лише увійти.
+- **Агент.** Claude — від тарифу Pro, 20 $/міс. Codex входить у тарифи ChatGPT, на безкоштовному з
+  невеликими лімітами; Plus — 20 $/міс.
+- **Vercel Hobby** — безкоштовно для особистих і некомерційних проєктів. Сайт, що рекламує ваші
+  платні послуги, Vercel вважає комерційним: для нього тариф Pro, 20 $/міс.
+- **GitHub** з приватними репозиторіями — безкоштовно.
+- **Домен** — від ≈ 11 $/рік за `.com` у Vercel; `.com.ua` в українських реєстраторів —
+  ≈ 460–740 грн/рік.
 
 ## Що знадобиться
 
-- Акаунт GitHub (безкоштовно) — https://github.com/signup; можна через Google або Apple
-- Акаунт Vercel, вхід через GitHub (Hobby, безкоштовно) — https://vercel.com/signup
-- Git і GitHub CLI — агент підкаже, як встановити
-- Node.js — необов'язково (без нього буде один крок на сайті Vercel)
-
-> Тариф Vercel Hobby — для особистих і некомерційних проєктів. Для сайту, який продає
-> ваші послуги, — Vercel Pro або інший хостинг з комерційним безкоштовним тарифом.
+- Акаунт Vercel — https://vercel.com/signup (через Google, GitHub, ChatGPT або Apple).
+- Для варіанта «із сейфом» — акаунт GitHub, https://github.com/signup (можна через Google).
+- Node.js, а для сейфа ще Git і GitHub CLI — агент встановить їх сам, вам лише натиснути
+  «Дозволити» і пройти вікно установника.
