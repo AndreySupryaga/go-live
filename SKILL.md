@@ -114,6 +114,8 @@ gh auth status 2>&1 || ~/.local/bin/gh auth status 2>&1
 `npm i -g vercel` (Node, встановлений за `references/install.md` у `~/.local/node`, ставить її без
 пароля). Помилка прав доступу (`EACCES`) → не чіпай `sudo`, пиши в усіх командах
 `npx --yes vercel@latest …` (далі в цьому файлі — просто `vercel`).
+Стара версія (`vercel --version` нижче 60: немає `vercel project create`, команди відповідають підказками)
+→ онови `npm i -g vercel@latest` або пиши `npx --yes vercel@latest …`.
 
 ## Крок 3. Акаунти і вхід (без терміналу)
 
