@@ -11,6 +11,9 @@ set -u
 CHECK_GITHUB=1
 if [ "${1:-}" = "--no-github" ]; then CHECK_GITHUB=0; shift; fi
 
+# Node і Vercel CLI, встановлені скілом без пароля (references/install.md)
+[ -d "$HOME/.local/node/bin" ] && PATH="$HOME/.local/node/bin:$PATH"
+
 # Vercel CLI: встановлений або через npx (без глобального встановлення)
 if command -v vercel >/dev/null 2>&1; then
   vc() { vercel "$@"; }

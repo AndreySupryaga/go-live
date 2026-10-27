@@ -1,7 +1,8 @@
 # Встановлення програм без терміналу і без sudo
 
 Людина пише із застосунку (Claude або ChatGPT) і не вміє працювати з терміналом. Ставиш ти;
-вона лише натискає «Дозволити» в застосунку і проходить вікно установника. Перед кожним кроком
+вона лише натискає «Дозволити» в застосунку. Системне вікно на macOS буде лише одне — для Git
+(режим «Сейф»); на Windows — запит «Так» на кожне встановлення. Перед кожним кроком
 скажи, яке вікно вона побачить і що там натиснути.
 
 Перевірка після встановлення — та сама команда `--version`. Програма встановилась, а команда її не
@@ -13,17 +14,20 @@
 
 Є Homebrew (`command -v brew`) → `brew install node`.
 
-Немає → офіційний установник `.pkg` (підписаний, відкривається без попереджень):
+Немає → офіційний архів у `~/.local/node`: без пароля, без вікон установника.
 
 ```bash
 V=$(curl -fsSL https://nodejs.org/dist/index.json 2>/dev/null | tr '{' '\n' | grep -m1 '"lts":"' \
   | sed -E 's/.*"version":"([^"]+)".*/\1/')
-curl -fL -o "$TMPDIR/node-$V.pkg" "https://nodejs.org/dist/$V/node-$V.pkg" && open "$TMPDIR/node-$V.pkg"
+A=$(uname -m | sed 's/x86_64/x64/')              # arm64 або x64
+mkdir -p ~/.local/node && curl -fsSL "https://nodejs.org/dist/$V/node-$V-darwin-$A.tar.gz" \
+  | tar -xz -C ~/.local/node --strip-components=1
+export PATH="$HOME/.local/node/bin:$PATH"; node --version
+npm i -g vercel                                  # без sudo: папка належить людині
 ```
 
-Скажи людині: «Відкрилось вікно установника Node.js. Натисніть Продовжити → Погоджуюсь →
-Встановити, введіть пароль від Mac, потім Закрити. Напишіть "готово"». Перевірка:
-`/usr/local/bin/node --version`.
+Кожна наступна команда запускається в новій оболонці, тому **на початку кожної** команди з `node`,
+`npm`, `npx` або `vercel` пиши `export PATH="$HOME/.local/node/bin:$PATH";`.
 
 ### Git (лише «Сейф»)
 
@@ -51,8 +55,9 @@ mkdir -p ~/.local/bin && cp "$TMPDIR/gh-unzip/gh_${T}_macOS_${A}/bin/gh" ~/.loca
 
 ### Vercel CLI
 
-Після Node: `npm i -g vercel`. Помилка прав (`EACCES`) → не чіпай `sudo`, пиши `npx --yes vercel@latest …`
-у кожній команді. Перевірка: `vercel --version` або `npx --yes vercel@latest --version`.
+Після Node: `npm i -g vercel`. Node з Homebrew або з `~/.local/node` ставить її без пароля. Помилка прав
+(`EACCES`, Node з офіційного `.pkg`) → не чіпай `sudo`, пиши `npx --yes vercel@latest …` у кожній
+команді. Перевірка: `vercel --version`.
 
 ## Windows
 
